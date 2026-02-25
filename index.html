@@ -5,339 +5,135 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🌍 미래 진로 탐험 TRPG</title>
 
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Noto+Sans+KR:wght@400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-
-  <!-- WebChat SDK -->
-  <script src="https://cdn.botframework.com/botframework-webchat/latest/webchat.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 
   <style>
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       🎨 테마 색상 — 여기만 바꾸면 됩니다!
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
     :root {
-      --color-bg-dark:      #0a0a2e;
-      --color-bg-mid:       #1a1a5e;
-      --color-bg-panel:     rgba(8, 8, 38, 0.97);
-      --color-accent:       #7df9ff;
-      --color-accent-gold:  #ffd700;
-      --color-accent-green: #2ed573;
-      --color-accent-red:   #ff4757;
-      --color-text-main:    #ffffff;
-      --color-text-sub:     #a0a8d0;
-      --color-border:       rgba(125, 249, 255, 0.25);
-      --glow-accent:        0 0 20px rgba(125, 249, 255, 0.4);
-      --gradient-bg:        linear-gradient(135deg, #0a0a2e 0%, #1a1a5e 50%, #0d1b3e 100%);
-      --gradient-btn:       linear-gradient(135deg, #1a1a6e, #2a2a9e);
-      --gradient-accent:    linear-gradient(90deg, #7df9ff, #00b4d8);
+      --color-bg:     #0a0a2e;
+      --color-accent: #7df9ff;
+      --color-sub:    #a0a8d0;
+      --color-border: rgba(125, 249, 255, 0.25);
+      --gradient-bg:  linear-gradient(135deg, #0a0a2e 0%, #1a1a5e 50%, #0d1b3e 100%);
     }
 
-    /* ━━━ 기본 레이아웃 ━━━ */
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    body {
+    html, body {
+      height: 100%;
       font-family: 'Noto Sans KR', sans-serif;
       background: var(--gradient-bg);
-      height: 100vh;
+      color: #fff;
       overflow: hidden;
-      color: var(--color-text-main);
+    }
+
+    /* ━━━ 전체 레이아웃 ━━━ */
+    #app {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
     }
 
     /* ━━━ 헤더 ━━━ */
     #game-header {
-      height: 64px;
-      padding: 0 28px;
+      flex-shrink: 0;
+      height: 60px;
       display: flex;
       align-items: center;
-      gap: 16px;
-      background: rgba(0, 0, 0, 0.5);
+      gap: 14px;
+      padding: 0 24px;
+      background: rgba(0, 0, 0, 0.55);
       border-bottom: 1px solid var(--color-border);
       backdrop-filter: blur(10px);
     }
     #game-header h1 {
       font-family: 'Orbitron', sans-serif;
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       color: var(--color-accent);
       letter-spacing: 2px;
+      white-space: nowrap;
     }
     #game-header p {
-      font-size: 0.82rem;
-      color: var(--color-text-sub);
-    }
-
-    /* ━━━ 2열 메인 레이아웃 ━━━ */
-    #game-body {
-      display: flex;
-      height: calc(100vh - 64px);
+      font-size: 0.8rem;
+      color: var(--color-sub);
+      white-space: nowrap;
     }
 
     /* ━━━ 채팅 영역 ━━━ */
-    #chat-section {
+    #game-body {
       flex: 1;
-      min-width: 0;
-      border-right:none;
+      display: flex;
+      justify-content: center;
+      overflow: hidden;
+      background: var(--gradient-bg);
     }
-    #webchat { height: 100%; }
 
-    /* ━━━ 능력치 사이드 패널 ━━━ */
-    #stats-panel {
-      display: none; 
-      width: 270px;
-      flex-shrink: 0;
-      background: var(--color-bg-panel);
-      padding: 20px 16px;
+    #chat-section {
+      width: 100%;
+      max-width: 800px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
-      overflow-y: auto;
-    }
-    .panel-title {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.85rem;
-      color: var(--color-accent);
-      letter-spacing: 2px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--color-border);
-    }
-    .job-badge {
-      text-align: center;
-      padding: 8px 12px;
-      background: var(--gradient-btn);
-      border: 1px solid var(--color-border);
-      border-radius: 20px;
-      font-size: 0.82rem;
-      color: var(--color-accent);
-      font-weight: 700;
-    }
-    .stat-label-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.8rem;
-      margin-bottom: 4px;
-    }
-    .stat-name  { color: var(--color-text-sub); }
-    .stat-value {
-      font-family: 'Share Tech Mono', monospace;
-      color: var(--color-accent);
-    }
-    .stat-bar-bg {
-      height: 7px;
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 4px;
       overflow: hidden;
-      margin-bottom: 10px;
-    }
-    .stat-bar-fill {
-      height: 100%;
-      border-radius: 4px;
-      background: var(--gradient-accent);
-      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 0 8px rgba(125, 249, 255, 0.4);
-    }
-    .panel-footer {
-      margin-top: auto;
-      padding-top: 12px;
-      border-top: 1px solid var(--color-border);
-      font-size: 0.8rem;
-      color: var(--color-text-sub);
-      text-align: center;
     }
 
-    /* ━━━ 선택지 버튼 ━━━ */
-    .webchat__suggested-actions__button {
-      background: var(--gradient-btn) !important;
-      color: var(--color-accent) !important;
-      border: 1px solid var(--color-accent) !important;
-      border-radius: 12px !important;
-      padding: 9px 16px !important;
-      font-family: 'Noto Sans KR', sans-serif !important;
-      font-size: 0.88rem !important;
-      font-weight: 600 !important;
-      transition: all 0.2s ease !important;
-      margin: 4px !important;
-      cursor: pointer !important;
+    #webchat {
+      flex: 1;
+      width: 100%;
+      overflow: hidden;
     }
-    .webchat__suggested-actions__button:hover {
-      background: var(--gradient-accent) !important;
-      color: #0a0a2e !important;
-      transform: translateY(-2px) !important;
-      box-shadow: var(--glow-accent) !important;
-    }
-    .webchat__suggested-actions__flow {
-      padding: 10px 16px !important;
-      background: rgba(10, 10, 46, 0.8) !important;
+
+    #webchat iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
     }
 
     /* ━━━ 모바일 반응형 ━━━ */
-    @media (max-width: 768px) {
-      #game-body { flex-direction: column; }
-      #stats-panel {
-        width: 100%;
-        height: 170px;
-        flex-direction: row;
-        flex-wrap: wrap;
-        overflow-x: auto;
+    @media (max-width: 600px) {
+      #game-header {
+        height: 50px;
+        padding: 0 14px;
         gap: 8px;
-        padding: 10px 12px;
+      }
+      #game-header h1 {
+        font-size: 0.95rem;
+        letter-spacing: 1px;
+      }
+      #game-header p {
+        display: none;
       }
       #chat-section {
-        border-right: none;
-        border-bottom: 1px solid var(--color-border);
+        max-width: 100%;
       }
-      #game-header h1 { font-size: 1rem; }
-      #game-header p  { display: none; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ━━━ 헤더 ━━━ -->
-  <header id="game-header">
-    <h1>🌍 NEO EARTH TRPG</h1>
-    <p>서기 2045년 — 인류의 미래를 당신의 손에</p>
-  </header>
+  <div id="app">
 
-  <!-- ━━━ 메인 레이아웃 ━━━ -->
-  <div id="game-body">
+    <!-- 헤더 -->
+    <header id="game-header">
+      <h1>🌍 NEO EARTH TRPG</h1>
+      <p>서기 2045년 — 인류의 미래를 당신의 손에</p>
+    </header>
 
-    <!-- 왼쪽: 채팅 -->
-    <section id="chat-section">
-      <div id="webchat"></div>
-    </section>
-
-    <!-- 오른쪽: 능력치 패널 -->
-    <aside id="stats-panel">
-      <div class="panel-title">⚔️ STATS</div>
-      <div class="job-badge" id="job-display">직업 선택 전</div>
-      <div id="stats-list"></div>
-      <div class="panel-footer">
-        🎯 완료 미션: <span id="mission-count">0</span>개
-      </div>
-    </aside>
+    <!-- 채팅창 -->
+    <div id="game-body">
+      <section id="chat-section">
+        <div id="webchat"></div>
+      </section>
+    </div>
 
   </div>
 
   <script>
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    // ⚠️ 여기만 수정! Copilot Studio 토큰 엔드포인트
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- 
-
-    // ━━━ 능력치 초기값 ━━━
-    let stats = {
-      "문제해결력": 50, "논리적사고": 50,
-      "기술활용":   50, "협업능력":   50,
-      "창의성":     50, "추진력":     50
+    window.onload = function () {
+      document.getElementById('webchat').innerHTML =
+        '<iframe src="https://copilotstudio.microsoft.com/environments/Default-62ae463a-9f12-4edf-8544-4f6ca3834524/bots/copilots_header_dc6a3/webchat?__version__=2" frameborder="0" allow="microphone" style="width:100%;height:100%;border:none;display:block;"></iframe>';
     };
-    let missionCount = 0;
-
-    // ━━━ 능력치 패널 렌더링 ━━━
-    function renderStats(changes = {}) {
-      document.getElementById('stats-list').innerHTML =
-        Object.entries(stats).map(([name, val]) => {
-          const delta = changes[name] || 0;
-          const changeTag = delta > 0
-            ? `<span style="color:var(--color-accent-gold);margin-left:4px">+${delta}▲</span>`
-            : delta < 0
-            ? `<span style="color:var(--color-accent-red);margin-left:4px">${delta}▼</span>`
-            : '';
-          return `
-            <div>
-              <div class="stat-label-row">
-                <span class="stat-name">${name}</span>
-                <span class="stat-value">${val}${changeTag}</span>
-              </div>
-              <div class="stat-bar-bg">
-                <div class="stat-bar-fill" style="width:${val}%"></div>
-              </div>
-            </div>`;
-        }).join('');
-    }
-
-    // ━━━ 선택지 파싱 → 버튼 변환 미들웨어 ━━━
-    function choiceMiddleware() {
-      return ({ dispatch }) => next => action => {
-        if (
-          action.type === 'DIRECT_LINE/INCOMING_ACTIVITY' &&
-          action.payload?.activity?.from?.role === 'bot'
-        ) {
-          const text = action.payload.activity.text || '';
-
-          // 능력치 변화 파싱
-          const changes = {};
-          const statPatterns = [
-            ["문제해결력", /문제해결력[^\+]*\+(\d+)/],
-            ["논리적사고", /논리적.{0,3}사고[^\+]*\+(\d+)/],
-            ["기술활용",   /기술.{0,3}활용[^\+]*\+(\d+)/],
-            ["협업능력",   /협업능력[^\+]*\+(\d+)/],
-            ["창의성",     /창의성[^\+]*\+(\d+)/],
-            ["추진력",     /추진력[^\+]*\+(\d+)/],
-          ];
-          statPatterns.forEach(([key, regex]) => {
-            const m = text.match(regex);
-            if (m) {
-              const d = parseInt(m[1]);
-              stats[key] = Math.min(100, stats[key] + d);
-              changes[key] = d;
-            }
-          });
-          if (Object.keys(changes).length > 0) {
-            missionCount++;
-            document.getElementById('mission-count').textContent = missionCount;
-            renderStats(changes);
-          }
-
-          // 직업 감지
-          const jobMap = {
-            "데이터 사이언티스트": "📊 데이터 사이언티스트",
-            "스마트팩토리":        "⚙️ 스마트팩토리 전문가",
-            "디지털 헬스케어":     "🧬 디지털 헬스케어",
-            "신재생에너지":        "☀️ 신재생에너지 엔지니어",
-            "스마트시티":          "🏙️ 스마트시티 설계",
-            "사이버보안":          "🛡️ 사이버보안 전문가",
-            "우주탐사":            "🚀 우주탐사 로봇 엔지니어",
-            "업사이클":            "♻️ 업사이클 제품 개발자",
-          };
-          Object.entries(jobMap).forEach(([keyword, label]) => {
-            if (text.includes(keyword)) {
-              document.getElementById('job-display').textContent = label;
-            }
-          });
-
-          // 선택지 → 버튼 변환
-          const matches = [...text.matchAll(/[1-3][️⃣.)]\s*([^\n]+)/g)];
-          if (matches.length >= 2) {
-            const emojis = ['1️⃣', '2️⃣', '3️⃣'];
-            action = {
-              ...action,
-              payload: {
-                ...action.payload,
-                activity: {
-                  ...action.payload.activity,
-                  suggestedActions: {
-                    to: [],
-                    actions: matches.slice(0, 3).map((m, i) => ({
-                      type:  'imBack',
-                      title: `${emojis[i]} ${m[1].trim()}`,
-                      value: String(i + 1)
-                    }))
-                  }
-                }
-              }
-            };
-          }
-        }
-        return next(action);
-      };
-    }
-
-    // ━━━ WebChat 초기화 ━━━
- window.onload = function() {
-  document.getElementById('webchat').innerHTML =
-    '<iframe src="https://copilotstudio.microsoft.com/environments/Default-62ae463a-9f12-4edf-8544-4f6ca3834524/bots/copilots_header_dc6a3/webchat?__version__=2" frameborder="0" style="width:100%;height:100%;min-height:600px;border:none;"></iframe>';
-  renderStats();
-};
   </script>
+
 </body>
 </html>
