@@ -9,22 +9,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 
   <style>
-    :root {
-      --color-bg:     #0a0a2e;
-      --color-accent: #7df9ff;
-      --color-sub:    #a0a8d0;
-      --color-border: rgba(125, 249, 255, 0.25);
-      --gradient-bg:  linear-gradient(135deg, #0a0a2e 0%, #1a1a5e 50%, #0d1b3e 100%);
-    }
-
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     html, body {
       height: 100%;
-      font-family: 'Noto Sans KR', sans-serif;
-      background: var(--gradient-bg);
-      color: #fff;
       overflow: hidden;
+      font-family: 'Noto Sans KR', sans-serif;
+      background: linear-gradient(135deg, #0a0a2e 0%, #1a1a5e 50%, #0d1b3e 100%);
+      color: #ffffff;
     }
 
     /* ━━━ 전체 레이아웃 ━━━ */
@@ -37,25 +29,25 @@
     /* ━━━ 헤더 ━━━ */
     #game-header {
       flex-shrink: 0;
-      height: 60px;
+      height: 58px;
       display: flex;
       align-items: center;
       gap: 14px;
       padding: 0 24px;
-      background: rgba(0, 0, 0, 0.55);
-      border-bottom: 1px solid var(--color-border);
+      background: rgba(0, 0, 0, 0.6);
+      border-bottom: 1px solid rgba(125, 249, 255, 0.25);
       backdrop-filter: blur(10px);
     }
     #game-header h1 {
       font-family: 'Orbitron', sans-serif;
-      font-size: 1.15rem;
-      color: var(--color-accent);
+      font-size: 1.1rem;
+      color: #7df9ff;
       letter-spacing: 2px;
       white-space: nowrap;
     }
     #game-header p {
       font-size: 0.8rem;
-      color: var(--color-sub);
+      color: #a0a8d0;
       white-space: nowrap;
     }
 
@@ -65,24 +57,20 @@
       display: flex;
       justify-content: center;
       overflow: hidden;
-      background: var(--gradient-bg);
     }
 
     #chat-section {
       width: 100%;
       max-width: 800px;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
+      height: 100%;
+      position: relative;
     }
 
-    #webchat {
-      flex: 1;
-      width: 100%;
-      overflow: hidden;
-    }
-
-    #webchat iframe {
+    /* ━━━ iframe ━━━ */
+    #chat-section iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
       border: none;
@@ -92,12 +80,11 @@
     /* ━━━ 모바일 반응형 ━━━ */
     @media (max-width: 600px) {
       #game-header {
-        height: 50px;
+        height: 48px;
         padding: 0 14px;
-        gap: 8px;
       }
       #game-header h1 {
-        font-size: 0.95rem;
+        font-size: 0.9rem;
         letter-spacing: 1px;
       }
       #game-header p {
@@ -122,18 +109,15 @@
     <!-- 채팅창 -->
     <div id="game-body">
       <section id="chat-section">
-        <div id="webchat"></div>
+        <iframe
+          src="https://copilotstudio.microsoft.com/environments/Default-62ae463a-9f12-4edf-8544-4f6ca3834524/bots/copilots_header_dc6a3/webchat?__version__=2"
+          frameborder="0"
+          title="NEO EARTH TRPG 챗봇">
+        </iframe>
       </section>
     </div>
 
   </div>
-
-  <script>
-    window.onload = function () {
-      document.getElementById('webchat').innerHTML =
-        '<iframe src="https://copilotstudio.microsoft.com/environments/Default-62ae463a-9f12-4edf-8544-4f6ca3834524/bots/copilots_header_dc6a3/webchat?__version__=2" frameborder="0" allow="microphone" style="width:100%;height:100%;border:none;display:block;"></iframe>';
-    };
-  </script>
 
 </body>
 </html>
