@@ -2,7 +2,8 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- ✅ viewport-fit=cover 추가 (아이폰 안전영역 대응) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>🌍 미래 진로 탐험 TRPG</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,19 +12,21 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    /* ✅ 1) overflow hidden 제거 (스크롤 막힘 방지) */
     html, body {
       height: 100%;
-      overflow: hidden;
+      overflow: auto;          /* ← hidden에서 auto로 */
+      -webkit-overflow-scrolling: touch;
       font-family: 'Noto Sans KR', sans-serif;
       background: linear-gradient(135deg, #0a0a2e 0%, #1a1a5e 50%, #0d1b3e 100%);
       color: #ffffff;
     }
 
-    /* ━━━ 전체 레이아웃 ━━━ */
+    /* ✅ 2) 모바일 키보드 대응: 100vh → 100dvh */
     #app {
       display: flex;
       flex-direction: column;
-      height: 100vh;
+      min-height: 100dvh;      /* ← height:100vh 대신 */
     }
 
     /* ━━━ 헤더 ━━━ */
@@ -62,15 +65,15 @@
     #chat-section {
       width: 100%;
       max-width: 800px;
-      height: 100%;
       position: relative;
+
+      /* ✅ 3) iframe 높이를 “화면높이 - 헤더”로 계산 */
+      height: calc(100dvh - 58px);
     }
 
-    /* ━━━ iframe ━━━ */
     #chat-section iframe {
       position: absolute;
-      top: 0;
-      left: 0;
+      top: 0; left: 0;
       width: 100%;
       height: 100%;
       border: none;
@@ -87,11 +90,10 @@
         font-size: 0.9rem;
         letter-spacing: 1px;
       }
-      #game-header p {
-        display: none;
-      }
+      #game-header p { display: none; }
       #chat-section {
         max-width: 100%;
+        height: calc(100dvh - 48px); /* ✅ 모바일 헤더 높이 반영 */
       }
     }
   </style>
@@ -99,14 +101,11 @@
 <body>
 
   <div id="app">
-
-    <!-- 헤더 -->
     <header id="game-header">
       <h1>🌍 NEO EARTH TRPG</h1>
       <p>서기 2045년 — 인류의 미래를 당신의 손에</p>
     </header>
 
-    <!-- 채팅창 -->
     <div id="game-body">
       <section id="chat-section">
         <iframe
@@ -116,7 +115,6 @@
         </iframe>
       </section>
     </div>
-
   </div>
 
 </body>
